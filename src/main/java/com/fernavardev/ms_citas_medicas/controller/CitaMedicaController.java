@@ -47,17 +47,17 @@ public class CitaMedicaController {
     }
 
     @GetMapping("/citas/{id}")
-    public CitaMedica obtenerCitaPorId(@PathVariable int id) {
+    public Object obtenerCitaPorId(@PathVariable int id) {
         for (CitaMedica cita : citas) {
             if (cita.getId() == id) {
                 return cita;
             }
         }
-        return null;
+        return "No se encontró una cita con id " + id;
     }
 
     @GetMapping("/citas/estado/{estado}")
-    public List<CitaMedica> obtenerCitasPorEstado(@PathVariable String estado) {
+    public Object obtenerCitasPorEstado(@PathVariable String estado) {
         List<CitaMedica> resultado = new ArrayList<>();
 
         for (CitaMedica cita : citas) {
@@ -66,17 +66,25 @@ public class CitaMedicaController {
             }
         }
 
+        if (resultado.isEmpty()) {
+            return "No existen citas con estado: " + estado;
+        }
+
         return resultado;
     }
 
     @GetMapping("/citas/disponibles")
-    public List<CitaMedica> obtenerCitasDisponibles() {
+    public Object obtenerCitasDisponibles() {
         List<CitaMedica> resultado = new ArrayList<>();
 
         for (CitaMedica cita : citas) {
             if (cita.getEstado().equalsIgnoreCase("disponible")) {
                 resultado.add(cita);
             }
+        }
+
+        if (resultado.isEmpty()) {
+            return "No existen citas disponibles";
         }
 
         return resultado;
@@ -112,21 +120,21 @@ public class CitaMedicaController {
     public String reservarCitaDemostrativa(@PathVariable int id) {
         for (CitaMedica cita : citas) {
             if (cita.getId() == id) {
-                return "La cita con id " + id + " fue reservada correctamente de forma demostrativa";
+                return "La cita con id " + id + " fue reservada correctamente";
             }
         }
 
-        return "No se encontró una cita con id " + id;
+        return "No se puede reservar. No existe una cita con id " + id;
     }
 
     @GetMapping("/citas/cancelar/{id}")
     public String cancelarCitaDemostrativa(@PathVariable int id) {
         for (CitaMedica cita : citas) {
             if (cita.getId() == id) {
-                return "La cita con id " + id + " fue cancelada correctamente de forma demostrativa";
+                return "La cita con id " + id + " fue cancelada correctamente";
             }
         }
 
-        return "No se encontró una cita con id " + id;
+        return "No se puede cancelar. No existe una cita con id " + id;
     }
 }
