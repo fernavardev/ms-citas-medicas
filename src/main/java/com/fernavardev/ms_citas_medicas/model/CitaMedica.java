@@ -1,22 +1,65 @@
 package com.fernavardev.ms_citas_medicas.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
+@Entity
+@Table(name = "cita_medica")
 public class CitaMedica {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @NotBlank(message = "El paciente no puede estar vacio")
+    @Size(min = 2, max = 100, message = "El paciente debe tener entre 2 y 100 caracteres")
+    @Column(name = "paciente", nullable = false)
     private String paciente;
+
+    @NotBlank(message = "El medico no puede estar vacio")
+    @Size(min = 2, max = 100, message = "El medico debe tener entre 2 y 100 caracteres")
+    @Column(name = "medico", nullable = false)
     private String medico;
+
+    @NotBlank(message = "La especialidad no puede estar vacia")
+    @Size(min = 2, max = 100, message = "La especialidad debe tener entre 2 y 100 caracteres")
+    @Column(name = "especialidad", nullable = false)
     private String especialidad;
+
+    @NotBlank(message = "La fecha no puede estar vacia")
+    @Column(name = "fecha", nullable = false)
     private String fecha;
+
+    @NotBlank(message = "La hora no puede estar vacia")
+    @Column(name = "hora", nullable = false)
     private String hora;
+
+    @NotBlank(message = "El estado no puede estar vacio")
+    @Pattern(
+        regexp = "^(disponible|reservada|cancelada)$",
+        message = "El estado solo puede ser: disponible, reservada o cancelada"
+    )
+    @Column(name = "estado", nullable = false)
     private String estado;
+
+    @NotBlank(message = "La observacion no puede estar vacia")
+    @Size(min = 5, max = 300, message = "La observacion debe tener entre 5 y 300 caracteres")
+    @Column(name = "observacion", nullable = false, length = 300)
     private String observacion;
 
     public CitaMedica() {
     }
 
-    public CitaMedica(int id, String paciente, String medico, String especialidad,
+    public CitaMedica(String paciente, String medico, String especialidad,
                       String fecha, String hora, String estado, String observacion) {
-        this.id = id;
         this.paciente = paciente;
         this.medico = medico;
         this.especialidad = especialidad;
@@ -26,7 +69,7 @@ public class CitaMedica {
         this.observacion = observacion;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -58,7 +101,7 @@ public class CitaMedica {
         return observacion;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
