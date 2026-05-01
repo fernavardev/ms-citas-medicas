@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  ms-citas:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.datasource.url=jdbc:oracle:thin:@maindb_tp?TNS_ADMIN=/app/wallet
+      - spring.datasource.username=fullstack1
+      - spring.datasource.password=ClaseDuoc123-
+      - spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+    restart: always
