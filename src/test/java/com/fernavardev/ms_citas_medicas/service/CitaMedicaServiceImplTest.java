@@ -71,4 +71,32 @@ class CitaMedicaServiceImplTest {
         verify(citaMedicaRepository).findById(1L);
         verify(citaMedicaRepository).save(cita);
     }
+
+    @Test
+    void deberiaCancelarCitaCorrectamente() {
+        when(citaMedicaRepository.findById(1L)).thenReturn(Optional.of(cita));
+        when(citaMedicaRepository.save(any(CitaMedica.class))).thenReturn(cita);
+
+        CitaMedica resultado = citaMedicaService.cancelarCita(1L);
+
+        assertNotNull(resultado);
+        assertEquals("cancelada", resultado.getEstado());
+
+        verify(citaMedicaRepository).findById(1L);
+        verify(citaMedicaRepository).save(cita);
+    }
+
+    @Test
+    void deberiaObtenerCitasDisponibles() {
+        List<CitaMedica> listaMock = Arrays.asList(cita);
+
+        when(citaMedicaRepository.findByEstadoIgnoreCase("disponible")).thenReturn(listaMock);
+
+        List<CitaMedica> resultado = citaMedicaService.getCitasDisponibles();
+
+        assertEquals(1, resultado.size());
+        assertEquals("disponible", resultado.get(0).getEstado());
+
+        verify(citaMedicaRepository).findByEstadoIgnoreCase("disponible");
+    }
 }
